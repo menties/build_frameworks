@@ -1,0 +1,7 @@
+<ivy-module version="2.0">
+    <info organisation="menties" module="helo"/>
+    <dependencies>
+        <dependency org="junit" name="junit" rev="4.12"/>
+        <dependency org="org.springframework" name="spring-webmvc" rev=".1.1.RELEASE"/>
+    </dependencies>
+</ivy-module>

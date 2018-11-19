@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'menties'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'org.springframework:spring-webmvc:5.1.1.RELEASE'
+}
+
+sourceSets {
+    main.java.srcDir("$rootDir/src")
+    test.java.srcDirs('testsrc')
+}
+
+jar {
+    archiveName = 'hello.jar'
+    destinationDir = file("$rootDir/server/src")
+}
+
+war {
+    webAppDirName = 'web'
+    archiveName = 'hello.war'
+    destinationDir = file("$rootDir/server/web")
+    classpath = classpath - sourceSets.main.output
+    from (jar) {
+        'server/src'
+    }
+}
+

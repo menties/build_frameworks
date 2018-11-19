@@ -1,0 +1,34 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="hello" default="jar">
+
+  <property name="src" location="src"/>
+  <property name="test" location="testsrc"/>
+  <property name="web" location="web"/>
+  <property name="jar.dest" location="server/src"/>
+  <property name="war.dest" location="server/web"/>
+  <property name="build.dir" location="build"/>
+  <property name="classes" location="${build.dir}/classes"/>
+
+  <target name="clean">
+    <delete dir="${build.dir}"/>
+  </target>
+
+    <target name="resolve">
+        <ivy:retrieve/>
+    </target>
+
+  <target name="compile">
+    <mkdir dir="${build.dir}/classes"/>
+    <javac srcdir="${src}" destdir="${classes}"/>
+  </target>
+
+  <target name="jar" depends="compile">
+    <mkdir dir="${jar.dest}"/>
+    <jar destfile="${jar.dest}/${ant.project.name}" basedir="${classes}"/>
+  </target>
+
+  <target name="war" depends="compile">
+    <mkdir dir="${war.dest}"/>
+    <war destfile="${war.dest}/${ant.project.name}" basedir="web"/>
+  </target>
+
+</project>
