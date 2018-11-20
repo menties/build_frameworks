@@ -1,34 +1,58 @@
-<project xmlns:ivy="antlib:org.apache.ivy.ant" name="hello" default="jar">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="hello" default="all">
 
   <property name="src" location="src"/>
   <property name="test" location="testsrc"/>
   <property name="web" location="web"/>
-  <property name="jar.dest" location="server/src"/>
-  <property name="war.dest" location="server/web"/>
+  <property name="jar.dir" location="server/src"/>
+  <property name="war.dir" location="server/web"/>
   <property name="build.dir" location="build"/>
-  <property name="classes" location="${build.dir}/classes"/>
+  <property name="classes.dir" location="${build.dir}/classes"/>
+  <property name="test-classes.dir" location="${build.dir}/test-classes"/>
+  <property name="lib.dir" location="lib"/>
+  <property name="propertiesFile" location="resources/project.properties"/>
+
+  <path id="lib.path.id">
+    <fileset dir="${lib.dir}"/>
+  </path>
+
+  <target name="convert">
+    <ivy:convertpom pomFile="pom.xml" ivyFile="ivy.xml"/>
+  </target>
+
+  <target name="resolve">
+    <ivy:retrieve/>
+  </target>
 
   <target name="clean">
     <delete dir="${build.dir}"/>
   </target>
 
-    <target name="resolve">
-        <ivy:retrieve/>
-    </target>
-
-  <target name="compile">
-    <mkdir dir="${build.dir}/classes"/>
-    <javac srcdir="${src}" destdir="${classes}"/>
+  <target name="compile" depends="resolve">
+    <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${test-classes.dir}"/>
+    <javac srcdir="${src}" destdir="${classes.dir}" classpathref="lib.path.id"/>
+    <echo>compiled classes</echo>
   </target>
 
   <target name="jar" depends="compile">
-    <mkdir dir="${jar.dest}"/>
-    <jar destfile="${jar.dest}/${ant.project.name}" basedir="${classes}"/>
+    <mkdir dir="${jar.dir}"/>
+    <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
+    <echo>made jar</echo>
   </target>
 
   <target name="war" depends="compile">
-    <mkdir dir="${war.dest}"/>
-    <war destfile="${war.dest}/${ant.project.name}" basedir="web"/>
+    <mkdir dir="${war.dir}"/>
+    <war destfile="${war.dir}/${ant.project.name}.war" basedir="web"/>
+    <echo>made war</echo>
   </target>
+
+  <target name="buildNumberIncrement" depends="jar, war">
+    <propertyfile file="${propertiesFile}">
+      <entry key="buildNumber" type="int" default="0" operation="+" value="1"/>
+    </propertyfile>
+    <echo>incremented build number</echo>
+  </target>
+
+  <target name="all" depends="buildNumberIncrement"/>
 
 </project>

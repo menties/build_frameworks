@@ -38,3 +38,20 @@ war {
     }
 }
 
+task('incrementBuildNumber') {
+    def propertiesFile = file('resources/project.properties')
+
+    if (propertiesFile.canRead()) {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream(propertiesFile))
+
+        def buildNumber = properties['buildNumber']
+        if (buildNumber == '') {
+            buildNumber = '0'
+        }
+        buildNumber = buildNumber.toInteger() + 1
+        properties['buildNumber'] = buildNumber.toString()
+        properties.store(propertiesFile.newWriter(), null)
+        println 'incremented build number'
+    }
+}
