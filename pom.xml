@@ -5,6 +5,10 @@
     <version>1</version>
     <packaging>war</packaging>
 
+    <properties>
+        <propertiesFile>resources.project.properties</propertiesFile>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -43,7 +47,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jarName>${name}</jarName>
+                    <jarName>${artifactId}</jarName>
                     <outputDirectory>server/bin</outputDirectory>
                 </configuration>
             </plugin>
@@ -61,7 +65,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <warName>${name}</warName>
+                    <warName>${artifactId}</warName>
                     <warSourceDirectory>web</warSourceDirectory>
                     <outputDirectory>server/web</outputDirectory>
                     <archiveClasses>true</archiveClasses>

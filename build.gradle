@@ -25,7 +25,8 @@ sourceSets {
 
 jar {
     archiveName = 'hello.jar'
-    destinationDir = file("$rootDir/server/src")
+    destinationDir = file("$rootDir/server/bin")
+    println("made war")
 }
 
 war {
@@ -36,6 +37,7 @@ war {
     from (jar) {
         'server/src'
     }
+    println 'made war'
 }
 
 task('incrementBuildNumber') {
