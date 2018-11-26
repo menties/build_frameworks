@@ -10,6 +10,11 @@
   <property name="test-classes.dir" location="${build.dir}/test-classes"/>
   <property name="lib.dir" location="lib"/>
   <property name="propertiesFile" location="resources/project.properties"/>
+  <property name="log.dir" location="log"/>
+
+  <tstamp>
+    <format property="date" pattern="dd-MM-yy"/>
+  </tstamp>
 
   <path id="lib.path.id">
     <fileset dir="${lib.dir}"/>
@@ -32,18 +37,21 @@
     <mkdir dir="${test-classes.dir}"/>
     <javac srcdir="${src}" destdir="${classes.dir}" classpathref="lib.path.id"/>
     <echo>compiled classes</echo>
+    <echo file="${log.dir}/${date}.txt" append="true">compiled classes${line.separator}</echo>
   </target>
 
   <target name="jar" depends="compile">
     <mkdir dir="${jar.dir}"/>
     <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}"/>
     <echo>made jar</echo>
+    <echo file="${log.dir}/${date}.txt" append="true">made jar${line.separator}</echo>
   </target>
 
   <target name="war" depends="compile">
     <mkdir dir="${war.dir}"/>
     <war destfile="${war.dir}/${ant.project.name}.war" basedir="web"/>
     <echo>made war</echo>
+    <echo file="${log.dir}/${date}.txt" append="true">made war${line.separator}</echo>
   </target>
 
   <target name="buildNumberIncrement" depends="jar, war">
@@ -51,6 +59,7 @@
       <entry key="buildNumber" type="int" default="0" operation="+" value="1"/>
     </propertyfile>
     <echo>incremented build number</echo>
+    <echo file="${log.dir}/${date}.txt" append="true">incremented build number${line.separator}</echo>
   </target>
 
   <target name="all" depends="buildNumberIncrement"/>

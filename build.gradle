@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'java'
     id 'war'
@@ -23,10 +25,17 @@ sourceSets {
     test.java.srcDirs('testsrc')
 }
 
+def date = new SimpleDateFormat("dd-MM-yy").format(new Date())
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 jar {
     archiveName = 'hello.jar'
     destinationDir = file("$rootDir/server/bin")
     println("made war")
+    file("log/$date" + ".txt").append("made jar\n")
 }
 
 war {
@@ -38,6 +47,7 @@ war {
         'server/src'
     }
     println 'made war'
+    file("log/$date" + ".txt").append("made war\n")
 }
 
 task('incrementBuildNumber') {
@@ -56,4 +66,5 @@ task('incrementBuildNumber') {
         properties.store(propertiesFile.newWriter(), null)
         println 'incremented build number'
     }
+    file("log/$date" + ".txt").append("incremented build number\n")
 }
